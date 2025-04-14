@@ -1,7 +1,0 @@
-streamlit
-scikit-learn
-tensorflow
-transformers
-joblib
-numpy
-scipy
