@@ -90,8 +90,8 @@ predict_btn = st.button("🎯 Predict")
 # Load models
 # -----------------------------
 svm_pipeline = joblib.load("models/svm_pipeline.joblib")
-bert_model = TFDistilBertForSequenceClassification.from_pretrained("models/bert")
-bert_tokenizer = DistilBertTokenizerFast.from_pretrained("models/bert")
+bert_model = TFDistilBertForSequenceClassification.from_pretrained("distilbert-base-uncased", num_labels=2)
+bert_tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-uncased")
 
 # -----------------------------
 # Prediction Logic
