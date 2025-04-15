@@ -83,7 +83,7 @@ predict_btn = st.button("🎯 Predict")
 # -----------------------------
 # Load model
 # -----------------------------
-svm_pipeline = joblib.load("models/svm_pipeline.joblib")
+svm_pipeline = joblib.load("emotion-detector/models/svm_pipeline.joblib")
 
 # -----------------------------
 # Prediction Logic
