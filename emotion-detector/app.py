@@ -1,10 +1,7 @@
 import streamlit as st
 import joblib
-import tensorflow as tf
 import numpy as np
 import time
-from transformers import TFDistilBertForSequenceClassification, DistilBertTokenizerFast
-from scipy.special import softmax
 
 # -----------------------------
 # Page config
@@ -16,11 +13,10 @@ st.set_page_config(page_title="Emotion Detector", page_icon="🎭", layout="cent
 # -----------------------------
 st.sidebar.title("ℹ️ About")
 st.sidebar.markdown("""
-This Emotion Detection App uses two models:
-- **TF-IDF + SVM**: Traditional machine learning.
-- **DistilBERT**: A lightweight Transformer model.
+This Emotion Detection App uses a machine learning model (TF-IDF + SVM)
+to predict the emotion in your text.
 
-Choose a model, type a sentence, and the app will tell you whether the emotion is **😊 Happy** or **😢 Sad** — along with its confidence!
+Just type your sentence and the app will tell you if it's **😊 Happy** or **😢 Sad** — with confidence!
 
 **Created by Adeem 💚**
 """)
@@ -71,27 +67,23 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
 # -----------------------------
 # Header
 # -----------------------------
 st.markdown('<div class="title">🎭 Emotion Detection App</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Choose a model and see the magic happen ✨</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Enter a sentence and get the emotion prediction ✨</div>', unsafe_allow_html=True)
 st.write("")
 
 # -----------------------------
-# Inputs
+# Input & Button
 # -----------------------------
 text = st.text_area("📝 Enter your sentence:", height=100)
-model_choice = st.selectbox("🧠 Choose model:", ["TF-IDF + SVM", "DistilBERT"])
 predict_btn = st.button("🎯 Predict")
 
 # -----------------------------
-# Load models
+# Load model
 # -----------------------------
 svm_pipeline = joblib.load("models/svm_pipeline.joblib")
-bert_model = TFDistilBertForSequenceClassification.from_pretrained("distilbert-base-uncased", num_labels=2)
-bert_tokenizer = DistilBertTokenizerFast.from_pretrained("distilbert-base-uncased")
 
 # -----------------------------
 # Prediction Logic
@@ -101,19 +93,12 @@ if predict_btn:
         st.warning("Please enter some text.")
     else:
         status_placeholder = st.empty()
-        status_placeholder.info("🤖 Thinking... analyzing your sentence...")
-        time.sleep(1.5)
+        status_placeholder.info("🤖 Analyzing your sentence...")
+        time.sleep(1.2)
 
-        if model_choice == "TF-IDF + SVM":
-            pred = svm_pipeline.predict([text])[0]
-            proba = svm_pipeline.predict_proba([text])[0]
-            confidence = round(np.max(proba) * 100, 2)
-        else:
-            encoding = bert_tokenizer(text, return_tensors="tf", truncation=True, padding=True, max_length=128)
-            output = bert_model(encoding)
-            probs = softmax(output.logits.numpy()[0])
-            pred = np.argmax(probs)
-            confidence = round(np.max(probs) * 100, 2)
+        pred = svm_pipeline.predict([text])[0]
+        proba = svm_pipeline.predict_proba([text])[0]
+        confidence = round(np.max(proba) * 100, 2)
 
         status_placeholder.empty()
 
