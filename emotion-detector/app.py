@@ -68,9 +68,9 @@ predict_btn = st.button("🎯 Predict" if language == "English" else "🎯 تو�
 # Load model based on language
 # -----------------------------
 if language == "English":
-    model = joblib.load("models/svm_pipeline.joblib")
+    model = joblib.load("emotion-detector/models/svm_pipeline.joblib")
 else:
-    model = joblib.load("models/svm_pipeline_ar.joblib")
+    model = joblib.load("emotion-detector/models/svm_pipeline_ar.joblib")
 
 # -----------------------------
 # Prediction Logic
